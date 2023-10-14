@@ -13,6 +13,8 @@ import shutil
 app = FastAPI()
 handler = Mangum(app)
 
+logging.basicConfig(level=logging.INFO)
+
 
 def remove_file(path: str):
     p = Path(path)
@@ -31,9 +33,9 @@ async def clean_up_files(zip_name: str, image_files: list, uploaded_image_path: 
 @app.post("/images")
 async def create_images(
         background_tasks: BackgroundTasks,
-        base_image: UploadFile = File(...),
+        base_image: UploadFile,
         prompt: str = Form(...),
-        n_images: int = Form(1),
+        images_per_variation: int = Form(1),
         creativity: float = Form(0.5)
 ):
     if creativity < 0.0 or creativity > 1.0:
@@ -42,13 +44,13 @@ async def create_images(
     if not prompt:
         raise HTTPException(status_code=400, detail='Generation prompt must not be empty.')
 
-    if n_images < 1:
-        raise HTTPException(status_code=400, detail='Invalid generation count.')
+    if images_per_variation < 1:
+        raise HTTPException(status_code=400, detail='Invalid input for "images_per_variation".')
 
-    if n_images > 3:
-        raise HTTPException(status_code=400, detail='The max. amount of generated images cannot be more than 3.')
+    if images_per_variation > 3:
+        raise HTTPException(status_code=400, detail='The maximum amount of images per variation cannot be more than 3.')
 
-    logging.info(f'Generating {n_images} images for prompt: "{prompt}", creativity: {creativity}')
+    logging.info(f'Generating {images_per_variation} images for prompt: "{prompt}", creativity: {creativity}')
 
     try:
         image_path = Path(f"uploaded_images/{base_image.filename}")
@@ -58,9 +60,9 @@ async def create_images(
 
         prompts = [{'generation_prompt': prompt, 'negative_logits': 'hands, bad food, disgusting, blurry, bad '
                                                                     'setting, glitches, bad plating, ugly cutlery,'
-                                                                    'uneven plate'}]
+                                                                    'uneven plate, mismatched colors'}]
 
-        image_files = generate_images(str(image_path), prompts, n_images, creativity)
+        image_files = generate_images(str(image_path), prompts, images_per_variation, creativity)
 
         zip_name = "results.zip"
         with zipfile.ZipFile(zip_name, 'w') as zipf:

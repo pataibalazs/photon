@@ -1,27 +1,28 @@
 import base64
-import math
 import os
 import requests
 from uuid import uuid4
 
-from src.preprocessing.resize import resize_image
+from src.preprocessing.resize import resize_and_crop_image
 
-allowed_dimensions = [(1024, 1024)]
+allowed_dimensions = [
+        (1024, 1024), (1152, 896), (1216, 832), (1344, 768), (1536, 640),
+        (640, 1536), (768, 1344), (832, 1216), (896, 1152)
+    ]
 
 model_endpoint = "https://api.stability.ai/v1/generation/stable-diffusion-xl-1024-v1-0/image-to-image"
 sdxl_sk = os.getenv('SDXL_SK', '')
 
 BASE_STEP_COUNT = 30
-BASE_IMAGE_STRENGTH = .4
-STRENGTH_CREATIVITY_DAMPING = 0.35
-STEPS_CREATIVITY_MULTIPLIER = 5
+BASE_IMAGE_STRENGTH = 0.8
+STRENGTH_CREATIVITY_DAMPING = 0.65
 CFG_SCALE = 5
 STYLE_PRESET = "cinematic"
 
 
 def generate_images(in_path: str, prompts, n_images_per_prompt: int, creativity: float, ) -> list:
     resized_path = in_path.split('.')[0] + '-resized-' + str(uuid4()) + '.png'
-    resize_image(in_path, resized_path, allowed_dimensions)
+    resize_and_crop_image(in_path, resized_path, allowed_dimensions)
 
     generated_images = []
 
@@ -39,7 +40,7 @@ def generate_images(in_path: str, prompts, n_images_per_prompt: int, creativity:
                 data={
                     "init_image_mode": "IMAGE_STRENGTH",
                     "image_strength": BASE_IMAGE_STRENGTH - (creativity * STRENGTH_CREATIVITY_DAMPING),
-                    "steps": BASE_STEP_COUNT + math.floor(creativity * STEPS_CREATIVITY_MULTIPLIER),
+                    "steps": BASE_STEP_COUNT,
                     "seed": 0,
                     "cfg_scale": CFG_SCALE,
                     "samples": 1,

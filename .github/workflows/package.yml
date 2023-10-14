@@ -42,10 +42,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: eu-central-1
 
-#    - name: Upload Lambda function package to S3
-#      run: |
-#        aws s3 cp lambda-function.zip s3://my-lambda-functions-bucket/  # Change the S3 bucket name accordingly
-
     - name: Update Lambda function code
       run: |
+        aws lambda update-function-configuration --function-name {{vars.AWS_LAMBDA_FN}} --environment "Variables={SDXL_SK=${{ secrets.SDXL_SK }},OPENAI_SK=${{ secrets.OPENAI_SK }}}"
         aws lambda update-function-code --function-name {{vars.AWS_LAMBDA_FN}} --zip-file fileb://lambda-function.zip
