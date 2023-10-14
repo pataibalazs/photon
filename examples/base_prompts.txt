@@ -1,0 +1,7 @@
+smoked_salmon.png: "Smoked salmon on a round plate in a light, minimal setting, done in a michelin star restaurant in Norway, vivid colors"
+
+dill_pickles.png: "Dill Pickles on a round plate in a light, minimal setting, on a marble countertop, additional decoration, vivid colors"
+
+mashed_potatoes.png: "Mashed potatoes with green onion garnish on a round plate in a light, minimal setting, on a marble countertop, cooked in a michelin star resturant, top view camera angle, vivid colors"
+
+wiener_schnitzel.png: "Authentic Austrian Wiener Schnitzel with garnish on a round plate in a light, minimal setting, on a marble countertop, cooked in a michelin star resturant, top view camera angle, vivid colors"

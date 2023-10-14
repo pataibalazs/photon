@@ -1,3 +1,6 @@
 fastapi
 uvicorn
 openai
+pydantic
+python-multipart
+asyncio
