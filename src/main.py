@@ -3,12 +3,15 @@ import logging
 
 from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
+from mangum import Mangum
+
 from src.images.generate import generate_images
 import zipfile
 from pathlib import Path
 import shutil
 
 app = FastAPI()
+handler = Mangum(app)
 
 
 def remove_file(path: str):
