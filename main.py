@@ -10,4 +10,4 @@ async def initial():
 
 @app.get("/prompt")
 async def generatePrompts(text: str):
-    return {"gptAnswer": callGPT(text)}
+    return callGPT(text)
