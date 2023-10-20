@@ -10,6 +10,8 @@ import zipfile
 from pathlib import Path
 import shutil
 
+from src.prompts.generate import generate_prompts
+
 app = FastAPI()
 handler = Mangum(app)
 
@@ -22,12 +24,17 @@ def remove_file(path: str):
         p.unlink()
 
 
-async def clean_up_files(zip_name: str, image_files: list, uploaded_image_path: str):
+async def clean_files(zip_name: str, image_files: list, uploaded_image_path: str):
     await asyncio.sleep(60)
     remove_file(zip_name)
     remove_file(uploaded_image_path)
     for file in image_files:
         remove_file(file)
+
+
+@app.post("/prompts")
+async def create_prompts(in_sequence: str = Form(...)):
+    return generate_prompts(in_sequence)
 
 
 @app.post("/images")
@@ -52,6 +59,8 @@ async def create_images(
 
     logging.info(f'Generating {images_per_variation} images for prompt: "{prompt}", creativity: {creativity}')
 
+    image_gen_prompts = generate_prompts(prompt)
+
     try:
         image_path = Path(f"uploaded_images/{base_image.filename}")
         image_path.parent.mkdir(parents=True, exist_ok=True)
@@ -60,7 +69,7 @@ async def create_images(
 
         prompts = [{'generation_prompt': prompt, 'negative_logits': 'hands, bad food, disgusting, blurry, bad '
                                                                     'setting, glitches, bad plating, ugly cutlery,'
-                                                                    'uneven plate, mismatched colors'}]
+                                                                    'uneven plate, mismatched colors'} for prompt in image_gen_prompts]
 
         image_files = generate_images(str(image_path), prompts, images_per_variation, creativity)
 
@@ -69,7 +78,7 @@ async def create_images(
             for img_file in image_files:
                 zipf.write(img_file, Path(img_file).name)
 
-        background_tasks.add_task(clean_up_files, zip_name, image_files, str(image_path))
+        background_tasks.add_task(clean_files, zip_name, image_files, str(image_path))
 
         return FileResponse(zip_name, media_type="application/zip")
     except Exception as e:
