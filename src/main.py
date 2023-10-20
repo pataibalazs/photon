@@ -33,8 +33,8 @@ async def clean_files(zip_name: str, image_files: list, uploaded_image_path: str
 
 
 @app.post("/prompts")
-async def create_prompts(in_sequence: str = Form(...)):
-    return generate_prompts(in_sequence)
+async def create_prompts(prompt: str = Form(...)):
+    return generate_prompts(in_sequence=prompt)
 
 
 @app.post("/images")
@@ -57,7 +57,7 @@ async def create_images(
     if images_per_variation > 3:
         raise HTTPException(status_code=400, detail='The maximum amount of images per variation cannot be more than 3.')
 
-    logging.info(f'Generating {images_per_variation} images for prompt: "{prompt}", creativity: {creativity}')
+    logging.info(f'Generating {images_per_variation} image(s) per variation for prompt: "{prompt}", creativity: {creativity}')
 
     image_gen_prompts = generate_prompts(prompt)
 
