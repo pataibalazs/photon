@@ -32,6 +32,11 @@ async def clean_files(zip_name: str, image_files: list, uploaded_image_path: str
         remove_file(file)
 
 
+@app.get("/")
+async def ping():
+    return "👋 Hi! Thanks for checking out this demo."
+
+
 @app.post("/prompts")
 async def create_prompts(prompt: str = Form(...)):
     return generate_prompts(in_sequence=prompt)
@@ -57,7 +62,8 @@ async def create_images(
     if images_per_variation > 3:
         raise HTTPException(status_code=400, detail='The maximum amount of images per variation cannot be more than 3.')
 
-    logging.info(f'Generating {images_per_variation} image(s) per variation for prompt: "{prompt}", creativity: {creativity}')
+    logging.info(
+        f'Generating {images_per_variation} image(s) per variation for prompt: "{prompt}", creativity: {creativity}')
 
     image_gen_prompts = generate_prompts(prompt)
 
@@ -69,7 +75,8 @@ async def create_images(
 
         prompts = [{'generation_prompt': prompt, 'negative_logits': 'hands, bad food, disgusting, blurry, bad '
                                                                     'setting, glitches, bad plating, ugly cutlery,'
-                                                                    'uneven plate, mismatched colors'} for prompt in image_gen_prompts]
+                                                                    'uneven plate, mismatched colors'} for prompt in
+                   image_gen_prompts]
 
         image_files = generate_images(str(image_path), prompts, images_per_variation, creativity)
 
@@ -83,4 +90,3 @@ async def create_images(
         return FileResponse(zip_name, media_type="application/zip")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
