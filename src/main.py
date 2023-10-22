@@ -1,7 +1,7 @@
 import asyncio
 import logging
 
-from fastapi import FastAPI, File, UploadFile, Form, HTTPException, BackgroundTasks
+from fastapi import FastAPI, UploadFile, Form, HTTPException, BackgroundTasks
 from fastapi.responses import FileResponse
 from mangum import Mangum
 
@@ -34,7 +34,7 @@ async def clean_files(zip_name: str, image_files: list, uploaded_image_path: str
 
 @app.get("/")
 async def ping():
-    return "👋 Hi! Thanks for checking out this demo."
+    return "👋 Hi! Thanks for checking this demo out."
 
 
 @app.post("/prompts")

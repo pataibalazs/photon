@@ -1,7 +1,5 @@
-fastapi
+fastapi==0.99.1
 uvicorn
 openai
-pydantic
 python-multipart
-asyncio
 mangum
