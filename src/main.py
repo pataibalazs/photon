@@ -15,7 +15,10 @@ from src.prompts.generate import generate_prompts
 app = FastAPI()
 handler = Mangum(app)
 
-logging.basicConfig(level=logging.INFO)
+if len(logging.getLogger().handlers) > 0:
+    logging.getLogger().setLevel(logging.INFO)
+else:
+    logging.basicConfig(level=logging.INFO)
 
 
 def remove_file(path: str):

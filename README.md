@@ -21,6 +21,7 @@ These limitations can be eliminated in production.
 
 These features can be added for the production version.
 
+- Custom domain (eg. `photon.dataqbe.hu`)
 - Concurrent image generation (speeds up image generation by more than 300%)
 - Image preprocessing, resizing
 - Masking (the background and the plate shape doesn't change)
