@@ -2,10 +2,26 @@
 
 ## Usage
 
+**Base URL:** https://s6j5cq3kcxxg6tqc2a7yhlztdu0adikl.lambda-url.eu-central-1.on.aws
+
 You can test the image and prompt generation capabilities by calling one of the endpoints, either programmatically, or through a GUI like [insomnia](https://insomnia.rest/).
 
     Postman contains a bug that corrupts boundaries for large images, making the API unable to process the uploaded files.
     It is therefore recommended to use different software to test image generation capabilities.
+
+### Testing with Insomnia
+
+After downloading Insomnia, set the timeout to `300000 ms` (5 minutes) under `application/preferences`.
+
+![img.png](docs/images/insomnia_timeout.png)
+
+Import the testing json from `docs/photon_demo_insomnia.json`.
+
+![img.png](docs/images/insomnia_import.png)
+
+Send the request and download the results.
+
+![img.png](docs/images/send_insomnia_request.png)
 
 ## Limitations
 
