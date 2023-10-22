@@ -26,6 +26,12 @@ def generate_images(in_path: str, prompts, n_images_per_prompt: int, creativity:
 
     generated_images = []
 
+    base_prompt = """Professional food photography based on the description of a 2 Michelin-star chef. The shot is an 
+    overhead shot with a minimal setup. The food is served strictly on a round plate which sits on a marble counter 
+    top. The image only includes foods and items described here.
+    
+    """
+
     for prompt in prompts:
         for i in range(n_images_per_prompt):
             response = requests.post(
@@ -45,7 +51,7 @@ def generate_images(in_path: str, prompts, n_images_per_prompt: int, creativity:
                     "cfg_scale": CFG_SCALE,
                     "samples": 1,
                     "style_preset": STYLE_PRESET,
-                    "text_prompts[0][text]": prompt['generation_prompt'],
+                    "text_prompts[0][text]": base_prompt + prompt['generation_prompt'],
                     "text_prompts[0][weight]": 1,
                     "text_prompts[1][text]": prompt['negative_logits'],
                     "text_prompts[1][weight]": -1,
@@ -57,11 +63,8 @@ def generate_images(in_path: str, prompts, n_images_per_prompt: int, creativity:
 
             data = response.json()
 
-            if not os.path.exists("./out"):
-                os.makedirs("./out")
-
             for _, image in enumerate(data["artifacts"]):
-                file_path = f'./out/sdxl-{image["seed"]}-{i}.png'
+                file_path = f'/tmp/sdxl-{image["seed"]}-{i}.png'
                 with open(file_path, "wb") as f:
                     f.write(base64.b64decode(image["base64"]))
                 generated_images.append(file_path)

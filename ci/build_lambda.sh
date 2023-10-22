@@ -5,15 +5,14 @@ SITE_PACKAGE_PREFIX="/python/lib/python3.11/site-packages"
 
 # Check if the script is called from the right directory
 if [[ -d "./dependencies" ]]; then
-    echo "Cleaning dependencies directory"
+    echo "Recreating dependencies..."
     rm -r dependencies
+else
+  echo "Creating dependencies..."
 fi
 
-if [[ -f "./requirements.txt" ]]; then
-    echo "File 'requirements.txt' exists in the current directory."
-else
-    echo "File 'requirements.txt' does not exist in the current directory."
-    exit 1  # Exit the script if 'requirements.txt' file does not exist
+if [[ -f "./lambda_function.zip" ]]; then
+    rm ./lambda_function.zip
 fi
 
 # Install requirements

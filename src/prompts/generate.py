@@ -56,9 +56,9 @@ def generate_prompts(in_sequence: str) -> list[str]:
                            f"display it on their website. All of the prompts should emphasize that the picture is "
                            f"taken from above. The prompts should avoid adding elements that aren't in the initial "
                            f"description of the food. Avoid displaying people, complex backgrounds and image "
-                           f"settings.An example:  Overhead shot of a bruschetta with chard, spinach, poached egg and "
-                           f"dukkah plate, shot on Sony Alpha A7R IV, food photography style, macro lens, "
-                           f"close up shot, 50mm lens f/ 1.4"
+                           f"settings. Here is an example:  Overhead shot of a bruschetta with chard, spinach, "
+                           f"poached egg and dukkah plate, shot on Sony Alpha A7R IV, food photography style, "
+                           f"macro lens, close up shot, 50mm lens f/ 1.4"
             },
             {
                 "role": "user",

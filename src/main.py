@@ -68,7 +68,7 @@ async def create_images(
     image_gen_prompts = generate_prompts(prompt)
 
     try:
-        image_path = Path(f"uploaded_images/{base_image.filename}")
+        image_path = Path(f"/tmp/uploaded_images/{base_image.filename}")
         image_path.parent.mkdir(parents=True, exist_ok=True)
         with image_path.open("wb") as buffer:
             shutil.copyfileobj(base_image.file, buffer)
@@ -80,7 +80,7 @@ async def create_images(
 
         image_files = generate_images(str(image_path), prompts, images_per_variation, creativity)
 
-        zip_name = "results.zip"
+        zip_name = "/tmp/results.zip"
         with zipfile.ZipFile(zip_name, 'w') as zipf:
             for img_file in image_files:
                 zipf.write(img_file, Path(img_file).name)
